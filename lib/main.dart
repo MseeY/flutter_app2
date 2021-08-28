@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app2/ui/router/router_generator.dart';
 
+import 'injector.dart';
+
 void main() {
+  setupLocator();
   runApp(MyApp());
 }
 
