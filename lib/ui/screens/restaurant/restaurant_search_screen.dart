@@ -36,51 +36,21 @@ class _RestaurantSearchScreenState extends State<RestaurantSearchScreen> {
 
   }
 
-//  Widget _appBar(){
-//    return Provider<RestaurantProvider>(
-//      create: (context)=> RestaurantProvider(),
-//      builder: (context,_){
-//        return SearchItem(
-//                controller: searchController,
-//                autoFocus: true,
-//                onSubmit: (value) => RestaurantProvider().getAllByKeyword(value, context),
-//              );;
-//      },
-//    );
-//  }
-
-  Widget _appBar() {
+  Widget _appBar(){
     return Builder(
-      builder: (context) {
-        return Consumer<RestaurantProvider>(
-          builder: (context, restaurantProv, _) {
-
-            return SearchItem(
-              controller: searchController,
-              autoFocus: true,
-              onSubmit: (value) => restaurantProv.getAllByKeyword(value, context),
-            );
-          },
-        );
-      },
-    );
-
+        builder: (context){
+          return ChangeNotifierProvider<RestaurantProvider>(
+            create: (context)=> RestaurantProvider(),
+            child: Consumer<RestaurantProvider>(
+              builder: (context,rp,_){
+                return SearchItem(
+                  controller: searchController,
+                  autoFocus: true,
+                  onSubmit: (value) => rp.getAllByKeyword(value, context),
+                );
+              },
+            ),
+          );
+        });
   }
-
-//  Widget _appBar() {
-//    return Builder(
-//        builder: (context) {
-//          return Provider<RestaurantProvider>(
-//            create: (context) => RestaurantProvider(),
-//            builder: (context, _) {
-//              return SearchItem(
-//                controller: searchController,
-//                autoFocus: true,
-//                onSubmit: (value) => RestaurantProvider().getAllByKeyword(value, context),
-//              );
-//            },
-//
-//          );
-//        });
-//  }
 }

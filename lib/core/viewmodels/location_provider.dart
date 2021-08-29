@@ -16,9 +16,9 @@ class LocationProvider extends ChangeNotifier{
 
   //* Location Coordinate
   double? _latitude;
-  double get latitude => _latitude!;
+  double? get latitude => _latitude;
   double? _longitude;
-  double get longitude => _longitude!;
+  double? get longitude => _longitude;
 
   //* Dependency Injection
   LocationUtils locationUtils = locator<LocationUtils>();
@@ -32,6 +32,9 @@ class LocationProvider extends ChangeNotifier{
     locationUtils.getLocation();
 
     _address = await locationUtils.getAddress();
+    print("_address==="+_address.toString());
+    print("locationUtils.latitude=="+locationUtils.latitude.toString());
+    print("locationUtils.longitude=="+locationUtils.longitude.toString());
     _latitude = locationUtils.latitude;
     _longitude = locationUtils.longitude;
     notifyListeners();

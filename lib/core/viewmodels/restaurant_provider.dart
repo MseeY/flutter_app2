@@ -9,15 +9,33 @@ import '../../injector.dart';
 
 class RestaurantProvider extends ChangeNotifier {
 
+
+  //* Restaurant list variable
+  List<RestaurantModel>? _restaurantList;
+  List<RestaurantModel>? get restaurantList => _restaurantList;
+
   //* Restaurant list by specific keyword
   late List<RestaurantModel>? _restaurantByKeywordList;
   List<RestaurantModel>? get restaurantByKeywordList => _restaurantByKeywordList;
+
+  //* Restaurant list by specific collection
+  late List<RestaurantModel>? _restaurantByCollectionList;
+  List<RestaurantModel>? get restaurantByCollectionList => _restaurantByCollectionList;
 
   //* To handle event search
   bool _onSearch = false;
 
   //* Dependency Injection
   RestaurantServices restaurantServices = locator<RestaurantServices>();
+
+  /// Function to get all restaurant by coordinate
+  void getAll(BuildContext context) async {
+    final locationProv = Provider.of<LocationProvider>(context, listen: false);
+    _restaurantList = await restaurantServices.getAll(
+        locationProv.latitude.toString(), locationProv.longitude.toString(),
+        context);
+    notifyListeners();
+  }
 
   /// Function to search location
   void getAllByKeyword(String keyword, BuildContext context) async {
@@ -30,12 +48,22 @@ class RestaurantProvider extends ChangeNotifier {
 
     //* Then fetch new keyword
     final locationProv = Provider.of<LocationProvider>(context, listen: false);
+    print("l=="+locationProv.latitude.toString());
+    print("long=="+locationProv.latitude.toString());
     _restaurantByKeywordList = await restaurantServices.getAllByKeyword(
-        keyword, locationProv.latitude.toString(),
+        keyword, locationProv.longitude.toString(),
         locationProv.longitude.toString(), context);
 
     //* Set search state to deactive
     setOnSearch(false);
+    notifyListeners();
+  }
+
+
+  /// Function to get restaurant by collection
+  void getAllByCollection(String collectionID, BuildContext context) async {
+    _restaurantByCollectionList = await restaurantServices.getAllByCollection(
+        collectionID, context);
     notifyListeners();
   }
 
@@ -48,6 +76,12 @@ class RestaurantProvider extends ChangeNotifier {
   /// Function to clear restaurant list by collection
   void clearResturantSearch() {
     _restaurantByKeywordList = null;
+    notifyListeners();
+  }
+
+  /// Function to clear restaurant list by collection
+  void clearRestaurantByCollection() {
+    _restaurantByCollectionList = null;
     notifyListeners();
   }
 
